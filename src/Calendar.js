@@ -93,11 +93,18 @@ class Calendar extends React.Component {
 
     /**
      * An array of event objects to display on the calendar
+     * If supplied a string, it will call the API to get the data from
+     * the server
      */
     events: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.arrayOf(PropTypes.object)
     ]),
+
+    /**
+     * Superagent object passed from outside
+     */
+    superagent: PropTypes.object,
 
     /**
      * Callback fired when the `date` value changes.
@@ -141,7 +148,6 @@ class Calendar extends React.Component {
      */
     onSelectEvent: PropTypes.func,
 
-    superagent: PropTypes.object,
 
     /**
      * Callback fired when dragging a selection in the Time views.
@@ -529,8 +535,8 @@ class Calendar extends React.Component {
   }
 
   loadCurrentEvents(date) {
-    let agent = this.props.superagent || request;
     if(typeof(this.props.events) === 'string') {
+      let agent = this.props.superagent || request;
       let firstVisibleDate = dates.firstVisibleDay(date, this.props.culture);
       let lastVisibleDate = dates.lastVisibleDay(date, this.props.culture);
 
@@ -544,7 +550,7 @@ class Calendar extends React.Component {
           if(!err) {
             let events = resp.body.map((ev) => {
               ev.start = dates.toDateFromString(ev.start);
-              ev.end = dates.add(dates.toDateFromString(ev.end), 1, 'day');
+              ev.end = dates.toDateFromString(ev.end);
               return ev;
             });
 
@@ -621,38 +627,38 @@ class Calendar extends React.Component {
 
     return (
       <div
-      {...elementProps}
-      className={cn('rbc-calendar', className, {
-        'rbc-rtl': props.rtl
-      })}
-      style={style}
+        {...elementProps}
+        className={cn('rbc-calendar', className, {
+          'rbc-rtl': props.rtl
+        })}
+        style={style}
       >
       {toolbar &&
         <ToolbarToRender
-        date={current}
-        view={view}
-        views={names}
-        label={viewLabel(current, view, formats, culture)}
-        onViewChange={this.handleViewChange}
-        onNavigate={this.handleNavigate}
-        messages={this.props.messages}
+          date={current}
+          view={view}
+          views={names}
+          label={viewLabel(current, view, formats, culture)}
+          onViewChange={this.handleViewChange}
+          onNavigate={this.handleNavigate}
+          messages={this.props.messages}
         />
       }
       <View
-      ref='view'
-      {...props}
-      {...formats}
-      culture={culture}
-      formats={undefined}
-      events={this.state.events}
-      date={current}
-      components={viewComponents}
-      getDrilldownView={this.getDrilldownView}
-      onNavigate={this.handleNavigate}
-      onDrillDown={this.handleDrillDown}
-      onSelectEvent={this.handleSelectEvent}
-      onSelectSlot={this.handleSelectSlot}
-      onShowMore={this._showMore}
+        ref='view'
+        {...props}
+        {...formats}
+        culture={culture}
+        formats={undefined}
+        events={this.state.events}
+        date={current}
+        components={viewComponents}
+        getDrilldownView={this.getDrilldownView}
+        onNavigate={this.handleNavigate}
+        onDrillDown={this.handleDrillDown}
+        onSelectEvent={this.handleSelectEvent}
+        onSelectSlot={this.handleSelectSlot}
+        onShowMore={this._showMore}
       />
       </div>
     );
