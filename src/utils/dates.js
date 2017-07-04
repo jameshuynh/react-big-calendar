@@ -46,6 +46,34 @@ let dates = {
     return days
   },
 
+  toDateFromString(dateStr) { // standard format yyyy-mm-dd HH:MM
+    let parts = dateStr.split(' ');
+    let dateParts = parts[0].split('-');
+    let timeParts = parts[1].split(':');
+
+    let year = parseInt(dateParts[0]);
+    let month = parseInt(dateParts[1], 10) - 1;
+    let date = parseInt(dateParts[2], 10);
+
+    let hour = parseInt(timeParts[0]);
+    let minute = parseInt(timeParts[1]);
+
+    return new Date(year, month, date, hour, minute, 0);
+  },
+
+  stringFromDate(date) { // standard format yyyy-mm-dd HH:MM
+    let month = date.getMonth() + 1;
+    if(month < 10) {
+      month = '0' + month;
+    }//end if
+
+    let day = date.getDate();
+    if(day < 10) {
+      day = '0' + day;
+    }//end if
+    return `${date.getFullYear()}-${month}-${day}`;
+  },
+
   ceil(date, unit){
     let floor = dates.startOf(date, unit)
 
