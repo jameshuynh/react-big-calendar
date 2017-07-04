@@ -24,34 +24,33 @@ class Toolbar extends React.Component {
     return (
       <div className='rbc-toolbar'>
         <span className='rbc-btn-group'>
+          {
+            this.viewNamesGroup(messages)
+          }
+        </span>
+
+        <span className='rbc-btn-group'>
           <button
             type='button'
-            onClick={this.navigate.bind(null, navigate.TODAY)}
-          >
+            onClick={this.navigate.bind(null, navigate.TODAY)}>
             {messages.today}
-          </button>
-          <button
-            type='button'
-            onClick={this.navigate.bind(null, navigate.PREVIOUS)}
-          >
-            {messages.previous}
-          </button>
-          <button
-            type='button'
-            onClick={this.navigate.bind(null, navigate.NEXT)}
-          >
-            {messages.next}
           </button>
         </span>
 
         <span className='rbc-toolbar-label'>
+          <button
+            type='button'
+            className='rbc-button-back'
+            onClick={this.navigate.bind(null, navigate.PREVIOUS)}>
+            {messages.previous}
+          </button>
           { label }
-        </span>
-
-        <span className='rbc-btn-group'>
-        {
-          this.viewNamesGroup(messages)
-        }
+          <button
+            type='button'
+            className='rbc-button-forward'
+            onClick={this.navigate.bind(null, navigate.NEXT)}>
+            {messages.next}
+          </button>
         </span>
       </div>
     );
