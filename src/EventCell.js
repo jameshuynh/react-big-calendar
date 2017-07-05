@@ -11,10 +11,12 @@ let propTypes = {
   slotEnd: PropTypes.instanceOf(Date),
 
   selected: PropTypes.bool,
+  isInsidePopup: PropTypes.bool,
   eventPropGetter: PropTypes.func,
   titleAccessor: accessor,
   allDayAccessor: accessor,
   startAccessor: accessor,
+  extraClassAccessor: accessor,
   endAccessor: accessor,
 
   eventComponent: elementType,
@@ -25,9 +27,6 @@ let propTypes = {
 class EventCell extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isTooltipActive: false
-    };
   }
 
   render() {
@@ -36,7 +35,7 @@ class EventCell extends React.Component {
       , event
       , selected
       , eventPropGetter
-      , startAccessor, endAccessor, titleAccessor
+      , startAccessor, endAccessor, titleAccessor, extraClassAccessor
       , slotStart
       , slotEnd
       , eventComponent: Event
@@ -46,6 +45,7 @@ class EventCell extends React.Component {
     let title = get(event, titleAccessor)
       , end = get(event, endAccessor)
       , start = get(event, startAccessor)
+      , extraClassName = get(event, extraClassAccessor)
       , isAllDay = get(event, props.allDayAccessor)
       , continuesPrior = dates.lt(start, slotStart, 'day')
       , continuesAfter = dates.gt(end, slotEnd, 'day')
@@ -57,18 +57,17 @@ class EventCell extends React.Component {
       <EventWrapper event={event}>
         <div
           style={{...props.style, ...style}}
-          className={cn('rbc-event', className, xClassName, {
+          className={cn('rbc-event', className, xClassName, extraClassName, {
             'rbc-selected': selected,
             'rbc-event-allday': isAllDay || dates.diff(start, dates.ceil(end, 'day'), 'day') > 1,
             'rbc-event-continues-prior': continuesPrior,
             'rbc-event-continues-after': continuesAfter
           })}
           data-tip
+          data-event='none'
           id={`event_block_for_${event.id}`}
-          data-event='click'
           data-for={`event_${event.id}`}
-          onClick={(e) => this.onSelectEvent(event, e)}
-        >
+          onClick={(e) => this.onSelectEvent(event, e)}>
           <div
             className='rbc-event-content' title={title}>
             { Event
@@ -86,14 +85,13 @@ class EventCell extends React.Component {
       onSelect
     } = this.props;
 
-    this.setState({
-      isTooltipActive: !this.state.isTooltipActive
-    });
-
-    onSelect(event, e);
+    onSelect(event, e, this.props.isInsidePopup);
   }
 }
 
 EventCell.propTypes = propTypes;
+EventCell.defaultProps = {
+  isInsidePopup: false
+};
 
 export default EventCell

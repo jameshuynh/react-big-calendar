@@ -299,6 +299,19 @@ class Calendar extends React.Component {
     titleAccessor: accessor,
 
     /**
+     * Accessor for the event title, used to display event information. Should
+     * resolve to a `renderable` value.
+     *
+     * ```js
+     * string | (event: Object) => any
+     * ```
+     *
+     * @type {(func|string)}
+     */
+    extraClassAccessor: accessor,
+
+
+    /**
      * Determines whether the event should be considered an "all day"
      * event and ignore time.
      * Must resolve to a `boolean` value.
@@ -514,7 +527,7 @@ class Calendar extends React.Component {
 
   static defaultProps = {
     elementProps: {},
-    popup: false,
+    popup: true,
     toolbar: true,
     view: views.MONTH,
     views: [views.MONTH, views.WEEK, views.DAY, views.AGENDA],
@@ -525,6 +538,7 @@ class Calendar extends React.Component {
 
     titleAccessor: 'title',
     allDayAccessor: 'allDay',
+    extraClassAccessor: 'extra_class',
     startAccessor: 'start',
     endAccessor: 'end'
   };
@@ -721,8 +735,15 @@ class Calendar extends React.Component {
         selectedEvent: args[0]
       }, () => {
         setTimeout(() => {
-          ReactTooltip.show(
-            document.getElementById(`event_block_for_${args[0].id}`));
+          let isInsidePopup = args[2];
+          if(isInsidePopup === true) {
+            let overlay = document.getElementsByClassName('rbc-overlay')[0];
+            let el = overlay.querySelector(`#event_block_for_${args[0].id}`);
+            ReactTooltip.show(el);
+          } else {
+            ReactTooltip.show(
+              document.getElementById(`event_block_for_${args[0].id}`));
+          }
         }, 100);
       });
     });

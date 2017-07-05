@@ -15,6 +15,7 @@ export { elementType }
 //     titleAccessor: accessor,
 //     startAccessor: accessor,
 //     endAccessor: accessor,
+//     extraClassAccessor: accessor,
 //     allDayAccessor: accessor,
 //   }).isRequired,
 // }).isRequired,

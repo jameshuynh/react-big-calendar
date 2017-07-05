@@ -20,6 +20,7 @@ class Agenda extends React.Component {
     length: PropTypes.number.isRequired,
     titleAccessor: accessor.isRequired,
     allDayAccessor: accessor.isRequired,
+    DayAccessor: accessor.isRequired,
     startAccessor: accessor.isRequired,
     endAccessor: accessor.isRequired,
 

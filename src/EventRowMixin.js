@@ -19,6 +19,7 @@ export default {
     titleAccessor: accessor,
     allDayAccessor: accessor,
     startAccessor: accessor,
+    extraClassAccessor: accessor,
     endAccessor: accessor,
 
     eventComponent: elementType,
@@ -35,7 +36,7 @@ export default {
   renderEvent(props, event) {
     let {
         eventPropGetter, selected, start, end
-      , startAccessor, endAccessor, titleAccessor
+      , startAccessor, endAccessor, titleAccessor, extraClassAccessor
       , allDayAccessor, eventComponent
       , eventWrapperComponent
       , onSelect } = props;
@@ -49,6 +50,7 @@ export default {
         selected={isSelected(event, selected)}
         startAccessor={startAccessor}
         endAccessor={endAccessor}
+        extraClassAccessor={extraClassAccessor}
         titleAccessor={titleAccessor}
         allDayAccessor={allDayAccessor}
         slotStart={start}

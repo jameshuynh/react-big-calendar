@@ -47,6 +47,7 @@ export default class TimeGrid extends Component {
     allDayAccessor: accessor.isRequired,
     startAccessor: accessor.isRequired,
     endAccessor: accessor.isRequired,
+    extraClassAccessor: accessor.isRequired,
 
     selected: PropTypes.object,
     selectable: PropTypes.oneOf([true, false, 'ignoreEvents']),
@@ -272,6 +273,7 @@ export default class TimeGrid extends Component {
             titleAccessor={this.props.titleAccessor}
             startAccessor={this.props.startAccessor}
             endAccessor={this.props.endAccessor}
+            extraClassAccessor={this.props.extraClassAccessor}
             allDayAccessor={this.props.allDayAccessor}
             eventPropGetter={this.props.eventPropGetter}
             selected={this.props.selected}

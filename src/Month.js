@@ -49,6 +49,7 @@ let propTypes = {
   allDayAccessor: accessor.isRequired,
   startAccessor: accessor.isRequired,
   endAccessor: accessor.isRequired,
+  extraClassAccessor: accessor.isRequired,
 
   selected: PropTypes.object,
   selectable: PropTypes.oneOf([true, false, 'ignoreEvents']),
@@ -155,6 +156,7 @@ class MonthView extends React.Component {
       startAccessor,
       endAccessor,
       allDayAccessor,
+      extraClassAccessor,
       eventPropGetter,
       messages,
       selected,
@@ -184,6 +186,7 @@ class MonthView extends React.Component {
         titleAccessor={titleAccessor}
         startAccessor={startAccessor}
         endAccessor={endAccessor}
+        extraClassAccessor={extraClassAccessor}
         allDayAccessor={allDayAccessor}
         eventPropGetter={eventPropGetter}
         renderHeader={this.readerDateHeading}

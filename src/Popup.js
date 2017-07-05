@@ -63,6 +63,7 @@ class Popup extends React.Component {
             <EventCell key={idx}
               {...props}
               event={event}
+              isInsidePopup={true}
               eventComponent={eventComponent}
               eventWrapperComponent={eventWrapperComponent}
               selected={isSelected(event, selected)}
