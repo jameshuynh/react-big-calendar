@@ -37,6 +37,8 @@ let propTypes = {
   scrollToTime: PropTypes.instanceOf(Date),
   eventPropGetter: PropTypes.func,
 
+  isShowingTooltip: PropTypes.bool,
+
   culture: PropTypes.string,
   dayFormat: dateFormat,
 
@@ -157,6 +159,7 @@ class MonthView extends React.Component {
       messages,
       selected,
       now,
+      isShowingTooltip
     } = this.props
 
     const { needLimitMeasure, rowLimit } = this.state
@@ -167,6 +170,7 @@ class MonthView extends React.Component {
     return (
       <DateContentRow
         key={weekIdx}
+        isShowingTooltip={isShowingTooltip}
         ref={weekIdx === 0 ? 'slotRow' : undefined}
         container={this.getContainer}
         className="rbc-month-row"

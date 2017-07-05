@@ -20,6 +20,7 @@ const propTypes = {
 
   rtl: PropTypes.bool,
   renderForMeasure: PropTypes.bool,
+  isShowingTooltip: PropTypes.bool,
   renderHeader: PropTypes.func,
 
   container: PropTypes.func,

@@ -2,7 +2,11 @@ import React from 'react';
 
 class EventWrapper extends React.Component {
   render() {
-    return this.props.children;
+    return (
+      <div className='rbc-event-wrapper'>
+        { this.props.children }
+      </div>
+    );
   }
 }
 

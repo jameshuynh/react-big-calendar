@@ -69,6 +69,39 @@
   background-color: @today-highlight-bg;
 }
 
+.rbc-calendar > div {
+  pointer-events: auto;
+}
+
+.rbc-calendar div.place-right.type-light {
+  border: 1px solid #ccc;
+  margin-left: 15px;
+  box-shadow: 0 2px 4px 0 #ccc;
+  &:after, &:before {
+    right: 100%;
+    top: 50%;
+    left: auto;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+  }
+
+  &:after {
+    border-color: none;
+    border-right-color: #fff;
+    border-width: 10px;
+    margin-top: -10px;
+  }
+  &:before {
+    border-color: none;
+    border-right-color: #ccc;
+    border-width: 12px;
+    margin-top: -12px;
+  }
+}
 
 @import './toolbar.less';
 @import './event.less';

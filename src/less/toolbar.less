@@ -27,7 +27,9 @@
 
   .rbc-button-back {
     margin-right: 10px;
-    background: url(../images/backward.svg) no-repeat center center;
+    -webkit-mask: url(../images/backward.svg) no-repeat center center;
+    mask-image: url(../images/backward.svg) no-repeat center center;
+    background-color: #333;
     text-indent: -9999px;
     width: 30px;
     outline: none;
@@ -35,7 +37,9 @@
 
   .rbc-button-forward {
     margin-left: 10px;
-    background: url(../images/forward.svg) no-repeat center center;
+    -webkit-mask: url(../images/forward.svg) no-repeat center center;
+    mask-image: url(../images/forward.svg) no-repeat center center;
+    background-color: #333;
     text-indent: -9999px;
     width: 30px;
     outline: none;

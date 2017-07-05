@@ -23,6 +23,13 @@ let propTypes = {
 }
 
 class EventCell extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isTooltipActive: false
+    };
+  }
+
   render() {
     let {
         className
@@ -32,7 +39,6 @@ class EventCell extends React.Component {
       , startAccessor, endAccessor, titleAccessor
       , slotStart
       , slotEnd
-      , onSelect
       , eventComponent: Event
       , eventWrapperComponent: EventWrapper
       , ...props } = this.props;
@@ -57,9 +63,14 @@ class EventCell extends React.Component {
             'rbc-event-continues-prior': continuesPrior,
             'rbc-event-continues-after': continuesAfter
           })}
-          onClick={(e) => onSelect(event, e)}
+          data-tip
+          id={`event_block_for_${event.id}`}
+          data-event='click'
+          data-for={`event_${event.id}`}
+          onClick={(e) => this.onSelectEvent(event, e)}
         >
-          <div className='rbc-event-content' title={title}>
+          <div
+            className='rbc-event-content' title={title}>
             { Event
               ? <Event event={event} title={title}/>
               : title
@@ -68,6 +79,18 @@ class EventCell extends React.Component {
         </div>
       </EventWrapper>
     );
+  }
+
+  onSelectEvent(event, e) {
+    let {
+      onSelect
+    } = this.props;
+
+    this.setState({
+      isTooltipActive: !this.state.isTooltipActive
+    });
+
+    onSelect(event, e);
   }
 }
 

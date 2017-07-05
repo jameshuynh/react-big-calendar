@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import {findDOMNode} from 'react-dom';
 import uncontrollable from 'uncontrollable';
 import cn from 'classnames';
 import {
@@ -25,6 +26,7 @@ import transform from 'lodash/transform';
 import mapValues from 'lodash/mapValues';
 
 import dates from './utils/dates';
+import ReactTooltip from 'react-tooltip';
 
 function viewNames(_views){
   return !Array.isArray(_views) ? Object.keys(_views) : _views
@@ -147,6 +149,17 @@ class Calendar extends React.Component {
      * @controllable selected
      */
     onSelectEvent: PropTypes.func,
+
+    /**
+     * Callback fired when a calendar event is selected.
+     *
+     * ```js
+     * (event: Object, e: SyntheticEvent) => any
+     * ```
+     *
+     * @controllable selected
+     */
+    eventTooltipContentDelegate: PropTypes.func,
 
 
     /**
@@ -528,6 +541,8 @@ class Calendar extends React.Component {
         events: []
       }
     }
+
+    this.state.isShowingTooltip = false;
   }
 
   componentWillMount() {
@@ -633,35 +648,54 @@ class Calendar extends React.Component {
         })}
         style={style}
       >
-      {toolbar &&
-        <ToolbarToRender
+        {toolbar &&
+          <ToolbarToRender
+            date={current}
+            view={view}
+            views={names}
+            label={viewLabel(current, view, formats, culture)}
+            onViewChange={this.handleViewChange}
+            onNavigate={this.handleNavigate}
+            messages={this.props.messages}
+          />
+        }
+        <View
+          ref='view'
+          {...props}
+          {...formats}
+          culture={culture}
+          formats={undefined}
+          events={this.state.events}
+          isShowingTooltip={this.state.isShowingTooltip}
           date={current}
-          view={view}
-          views={names}
-          label={viewLabel(current, view, formats, culture)}
-          onViewChange={this.handleViewChange}
+          components={viewComponents}
+          getDrilldownView={this.getDrilldownView}
           onNavigate={this.handleNavigate}
-          messages={this.props.messages}
+          onDrillDown={this.handleDrillDown}
+          onSelectEvent={this.handleSelectEvent}
+          onSelectSlot={this.handleSelectSlot}
+          onShowMore={this._showMore}
         />
-      }
-      <View
-        ref='view'
-        {...props}
-        {...formats}
-        culture={culture}
-        formats={undefined}
-        events={this.state.events}
-        date={current}
-        components={viewComponents}
-        getDrilldownView={this.getDrilldownView}
-        onNavigate={this.handleNavigate}
-        onDrillDown={this.handleDrillDown}
-        onSelectEvent={this.handleSelectEvent}
-        onSelectSlot={this.handleSelectSlot}
-        onShowMore={this._showMore}
-      />
+        { this.renderTooltip() }
       </div>
     );
+  }
+
+  renderTooltip() {
+    if(this.state.selectedEvent) {
+      return (
+        <ReactTooltip
+                   globalEventOff='click'
+                   place="right"
+                   type='light'
+                   effect='solid'
+                   id={`event_${this.state.selectedEvent.id}`}>
+          { this.handleEventTooltipContentDelegate(this.state.selectedEvent) }
+        </ReactTooltip>
+      );
+    } else {
+      return null;
+    }
   }
 
   handleNavigate = (action, newDate) => {
@@ -680,8 +714,29 @@ class Calendar extends React.Component {
   };
 
   handleSelectEvent = (...args) => {
+    this.setState({
+      selectedEvent: null
+    }, () => {
+      this.setState({
+        selectedEvent: args[0]
+      }, () => {
+        setTimeout(() => {
+          ReactTooltip.show(
+            document.getElementById(`event_block_for_${args[0].id}`));
+        }, 100);
+      });
+    });
+
     notify(this.props.onSelectEvent, args)
   };
+
+  handleEventTooltipContentDelegate = (...args) => {
+    if(this.props.eventTooltipContentDelegate) {
+      return this.props.eventTooltipContentDelegate(...args);
+    } else {
+      return null;
+    }
+  }
 
   handleSelectSlot = (slotInfo) => {
     notify(this.props.onSelectSlot, slotInfo)
@@ -699,4 +754,4 @@ export default uncontrollable(Calendar, {
   view: 'onView',
   date: 'onNavigate',
   selected: 'onSelectEvent'
-})
+});
